@@ -2,8 +2,22 @@ require('dotenv').config();
 console.log(process.env.SECRET); 
 
 
+const mongoose = require("mongoose");
 const express = require("express");
+
 const app = express();
+
+const dbUrl = process.env.ATLASDB_URL;
+
+mongoose.connect(dbUrl)
+.then(() => {
+    console.log("MongoDB Connected");
+})
+.catch((err) => {
+    console.log(err);
+});
+
+
 const ejsMate = require("ejs-mate");
 const ExpressError=require("./utils/ExpressError");
 const path = require("path");
@@ -13,6 +27,9 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 let session = require('express-session');
+// const MongoStore = require('connect-mongo');
+const MongoStore = require("connect-mongo").default;
+
 let flash = require('connect-flash');
 let methodOverride = require('method-override');
 app.use(methodOverride("_method"));
@@ -27,9 +44,16 @@ const User=require("./models/user.js")
 
 
 
-
+const store=MongoStore.create({
+    mongoUrl:dbUrl,
+    crypto:{
+        secret:"mysupersecreat",
+    },
+    touchAfter: 24 * 3600,
+});
 
 const sessionOption={
+    store,
     secret:"mysupersecreat",
     resave:false,
     saveUninitialized:true,
@@ -39,9 +63,7 @@ const sessionOption={
     }
 };
 
-app.get("/", (req, res) => {
-    res.send("Hi, I am root");
-})
+
 
 app.use(session(sessionOption));
 app.use(flash());
