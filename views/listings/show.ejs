@@ -2,12 +2,15 @@
 
     <div class="row mt-3">
         <div class="col-8 offset-3">
-            <h2><%=data.title%></h2>
+            <h2>
+                <%=data.title%>
+            </h2>
         </div>
-        <div class="card col-6 offset-3 show-card">
+        <div class="card listing-card col-6 offset-3 show-card">
             <img src="<%=data.image.url%>" class="card-img-top show-image" alt="Listing Image">
             <div class="card-body">
                 <p class="card-text">
+                   <b><i> @<%=data.owner.username%></i></b> <br>
                     <%=data.description%> <br>
                         &#8377 <%= Number(data.price).toLocaleString("en-IN") %> <br>
                             <%=data.location%> <br>
@@ -17,38 +20,78 @@
             </div>
         </div>
     </div>
+    <%if(currUser && data.owner._id.equals(currUser._id)  ){ %>
+        <div class="btns">
+            <a class="btn btn-dark col-1 offset-3 btn-primary" href="/listings/<%=data._id%>/edit"> Edit </a>
 
-    <div class="btns">
-        <a class="btn btn-dark col-1 offset-3 btn-primary" href="/listings/<%=data._id%>/edit"> Edit </a>
+            <form method="post" action="/listings/<%=data._id%>?_method=DELETE">
+                <button class="btn btn-dark  btn-primary offset-4">Delete</button>
+            </form>
 
-        <form method="post" action="/listings/<%=data._id%>?_method=DELETE">
-            <button class="btn btn-dark  btn-primary offset-4">Delete</button>
-        </form>
+        </div>
 
-    </div>
-
+    <%}%>
     
 
-    <div class=" mt-3 col-8 mb-4 offset-3">
-        <hr>
-        <h3>Leave a Review...</h3>
 
-        <form class="needs-validation" novalidate method="post" action="/listings/<%=data._id%>/reviews">
-            <div class="col-8 ">
+    <%if(currUser){%>
+        <div class=" mt-3 col-8 mb-4 offset-3">
+            <hr>
+            <h3>Leave a Review...</h3>
+
+            <form class="needs-validation" novalidate method="post" action="/listings/<%=data._id%>/reviews">
+                <div class="col-8 ">
                 <label for="rating">Rating</label>
-                <input class="form-range"  class="form-control mt-1" type="range" min="0" max="5" name="review[rating]" id="">
+                <fieldset class="starability-slot">
+                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                <label for="first-rate1" title="Terrible">1 star</label>
+                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                <label for="first-rate2" title="Not good">2 stars</label>
+                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                <label for="first-rate3" title="Average">3 stars</label>
+                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                <label for="first-rate4" title="Very good">4 stars</label>
+                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+                </div>
+
+
+                <div class="col-8 mt-3">
+                    <label for="comment">Comment</label>
+                    <textarea cols="30" rows="5" required class="form-control mt-1" name="review[comment]" id=""></textarea>
+                    <div class="invalid-feedback">Please add some comment for review</div>
+                </div>
+                <button class=" mt-3 btn btn-dark">Submit</button>
+            </form>
             </div>
-            <div class="col-8 mt-3">
-                <label for="comment">Comment</label> 
-                <textarea  cols="30" rows="5" required class="form-control mt-1" name="review[comment]" id=""></textarea>
-                <div class="invalid-feedback">Please add some comment for review</div>
+            <%}%>
+
+            <div class=" mt-3 col-8 mb-4 offset-3">
+            <p class="mt-3"><b>All Reviews...</b></p> 
+            <div class="row">
+                <hr>
+                <% for(let review of data.reviews){ %>
+                    <div class="card col-5 offset-3 ms-3 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title"><b><i>@<%=review.author.username%></i></b></h5>
+                            <p class="card-text">
+                                <%= "⭐" .repeat(review.rating || 0) %>
+                            </p>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                <%=review.comment%>
+                            </h6>
+
+
+                        </div>
+                        <%if(currUser && currUser._id.equals(review.author._id)){%> 
+                        <form method="post" class="mb-2" action="/listings/<%=data._id%>/reviews/<%=review._id%>?_method=DELETE">
+                            <button class="mt-3 btn btn-danger ">Delete</button>
+                        </form>
+                        <%}%>
+                    </div>
+                    <%}%>
             </div>
-            <button class=" mt-3 btn btn-dark">Submit</button>
-        </form>
-        
-        
-
-    </div>
-
-
-
+        </div>
+     

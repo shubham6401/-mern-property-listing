@@ -9,10 +9,10 @@
         <div class="row">
             <div class="col-8 offset-2 mt-3">
                 <h1 class="mb-3">Edit Listing</h1>
-                <form method="post" class="needs-validation" novalidate action="/listings/<%=data._id%>/edit?_method=PUT">
+                <form method="post" class="needs-validation" enctype="multipart/form-data" novalidate action="/listings/<%=data._id%>/edit?_method=PUT">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" required name="title" value="<%=data.title%>" class="form-control">
+                        <input type="text" required name="listing[title]" value="<%=data.title%>" class="form-control">
                         <div class="invalid-feedback">Enter Valid Title</div>
  
 
@@ -20,7 +20,7 @@
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea rows="5" required cols="30" type="text" name="description"
+                        <textarea rows="5" required cols="30" type="text" name="listing[description]"
                             class="form-control"> <%=data.description%></textarea>
                         <div class="Enter Some Description">Enter Valid Title</div>
 
@@ -28,9 +28,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="image" class="form-label">Image Url</label>
-                        <input type="text" required name="image[url]" value="<%=data.image.url%>" class="form-control">
-                        <div class="invalid-feedback">Enter Valid link</div>
+                        <label for="image" class="form-label">Upload new image</label>
+                        <input type="file"  name="listing[image][url]"  class="form-control" >
+                        <!-- <div class="invalid-feedback">Enter Valid link</div> -->
 
 
                     </div>
@@ -40,7 +40,7 @@
 
                         <div class="mb-3 col-md-4">
                             <label for="price" class="form-label">Price</label>
-                            <input type="number" required name="price" value="<%=data.price%>" class="form-control">
+                            <input type="number" required name="listing[price]" value="<%=data.price%>" class="form-control">
                         <div class="invalid-feedback">Enter Price</div>
 
 
@@ -48,7 +48,7 @@
 
                         <div class="mb-3 col-md-8">
                             <label for="country" class="form-label">Country</label>
-                            <input type="text" required name="country" value="<%=data.country%>" class="form-control">
+                            <input type="text" required name="listing[country]" value="<%=data.country%>" class="form-control">
                         <div class="invalid-feedback">Enter Country</div>
 
 
@@ -57,7 +57,7 @@
 
                     <div class="mb-3">
                         <label for="location" class="form-label">Location</label>
-                        <input type="text" required name="location" value="<%=data.location%>" class="form-control">
+                        <input type="text" required name="listing[location]" value="<%=data.location%>" class="form-control">
                         <div class="invalid-feedback">Enter Location</div>
 
                     </div>
