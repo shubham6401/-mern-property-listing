@@ -66,23 +66,31 @@
 <!-- Listings Cards Grid -->
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     <% for(let listing of data) { %>
-        <a class="card-link" href="/listings/<%= listing._id %>">
-            <div class="card listing-card col">
-                <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image" style="height: 20rem;">
-                <div class="card-img-overlay"></div>
-                <div class="card-body">
-                    <p class="card-text">
-                        <b><%= listing.title %></b> <br>
-                        &#8377; <%= Number(listing.price).toLocaleString("en-IN") %> /night
-                        <i class="tax-info"> &nbsp; &nbsp;+18% GST (&#8377; <%= Number(listing.price * 1.18).toLocaleString("en-IN", {maximumFractionDigits: 0}) %> total)</i>
-                    </p>
+        <div class="col listing-card-wrapper mb-4">
+            <!-- Wishlist Button -->
+            <button class="wishlist-btn" onclick="toggleWishlist(event, this, '<%= listing._id %>')" title="Save to wishlist">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+
+            <a class="card-link text-decoration-none" href="/listings/<%= listing._id %>">
+                <div class="card listing-card h-100">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image" style="height: 20rem; border-radius: 1rem; object-fit: cover;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body pt-2">
+                        <p class="card-text text-dark">
+                            <b class="fs-6"><%= listing.title %></b> <br>
+                            <span class="text-muted fs-6"><i class="fa-solid fa-location-dot text-danger"></i> <%= listing.location %>, <%= listing.country %></span> <br>
+                            <span class="fw-bold mt-1 d-inline-block">&#8377; <%= Number(listing.price).toLocaleString("en-IN") %></span> <span class="text-muted">/ night</span>
+                            <i class="tax-info"> &nbsp; &nbsp;+18% GST (&#8377; <%= Number(listing.price * 1.18).toLocaleString("en-IN", {maximumFractionDigits: 0}) %> total)</i>
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
     <% } %>
 </div>
 
-<!-- Real-Time Tax Toggle Script -->
+<!-- Real-Time Tax Toggle & Wishlist Script -->
 <script>
     const taxSwitch = document.getElementById("flexSwitchCheckDefault");
     if (taxSwitch) {
@@ -97,4 +105,34 @@
             }
         });
     }
+
+    function toggleWishlist(event, btn, listingId) {
+        event.stopPropagation();
+        event.preventDefault();
+        btn.classList.toggle("active-heart");
+        const icon = btn.querySelector("i");
+        if (btn.classList.contains("active-heart")) {
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+            localStorage.setItem("wishlist_" + listingId, "true");
+        } else {
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+            localStorage.removeItem("wishlist_" + listingId);
+        }
+    }
+
+    // Load saved wishlist hearts
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".wishlist-btn").forEach(btn => {
+            const onclickAttr = btn.getAttribute("onclick");
+            const match = onclickAttr.match(/'([^']+)')$/);
+            if (match && localStorage.getItem("wishlist_" + match[1])) {
+                btn.classList.add("active-heart");
+                const icon = btn.querySelector("i");
+                icon.classList.remove("fa-regular");
+                icon.classList.add("fa-solid");
+            }
+        });
+    });
 </script>
