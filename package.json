@@ -1,13 +1,14 @@
 {
   "engines": {
-    "node": "25.8.0"
+    "node": ">=18.0.0"
   },
   "name": "major-project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
