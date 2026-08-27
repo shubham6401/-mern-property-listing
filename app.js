@@ -77,15 +77,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 
-app.get("/download-resume-experience", (req, res) => {
-    const filePath = "/Users/shubhamkrgupta/mmmut programs/web designing/projects/project interview platform/Shubham_Kumar_Gupta_Resume_With_Experience.pdf";
-    res.download(filePath, "Shubham_Kumar_Gupta_Resume_With_Experience.pdf");
-});
 
-app.get("/download-resume", (req, res) => {
-    const filePath = "/Users/shubhamkrgupta/mmmut programs/web designing/projects/project interview platform/Shubham_Kumar_Gupta_Resume.pdf";
-    res.download(filePath, "Shubham_Kumar_Gupta_Resume.pdf");
-});
 
 app.get("/", (req, res) => {
   res.redirect("/listings");
