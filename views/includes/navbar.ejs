@@ -1,31 +1,38 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/listings">
+            <i class="fa-regular fa-compass"></i>
+            <span class="fw-bold fs-5 text-dark d-none d-sm-inline">wanderlust</span>
+        </a>
+        
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+        <div class="collapse navbar-collapse mt-2 mt-md-0" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" href="/listings">Explore</a>
+                <a class="nav-link" href="/listings"><i class="fa-solid fa-compass me-1 text-danger"></i> Explore</a>
             </div>
 
-            <div class="navbar-nav mx-auto">
-                <form class="d-flex" role="search" action="/listings" method="GET">
-                    <input class="form-control me-2 search-input" type="search" name="q" placeholder="Search destinations..." aria-label="Search">
-                    <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            <!-- Global Search Form -->
+            <div class="navbar-nav mx-auto my-2 my-md-0 w-100 max-w-md" style="max-width: 380px;">
+                <form class="d-flex w-100" role="search" action="/listings" method="GET">
+                    <div class="input-group">
+                        <input class="form-control search-input" type="search" name="q" placeholder="Search destinations, villas..." aria-label="Search">
+                        <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
                 </form>
             </div>
 
-
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/listings/new">Add new Listing</a>
-                <%if(!currUser){%>
-                <a class="nav-link" href="/user/signup"><b>SignUp</b></a>
-                <a class="nav-link" href="/user/login"><b>Login</b></a>
-                <%}%>
-                <%if(currUser){%>
-                <a class="nav-link" href="/user/logout"><b>Logout</b></a>
-                <%}%>
+            <div class="navbar-nav ms-auto align-items-md-center">
+                <a class="nav-link" href="/listings/new"><i class="fa-solid fa-plus me-1 text-secondary"></i> Add Listing</a>
+                <% if(!currUser) { %>
+                    <a class="nav-link" href="/user/signup"><b>SignUp</b></a>
+                    <a class="nav-link" href="/user/login"><b>Login</b></a>
+                <% } %>
+                <% if(currUser) { %>
+                    <a class="nav-link text-danger" href="/user/logout"><i class="fa-solid fa-right-from-bracket me-1"></i> <b>Logout</b></a>
+                <% } %>
             </div>
         </div>
     </div>

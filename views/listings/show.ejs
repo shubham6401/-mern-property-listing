@@ -1,6 +1,6 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
-<div class="container my-4">
+<div class="container my-3 my-md-4">
     <!-- Breadcrumb & Header -->
     <div class="row">
         <div class="col-12">
@@ -10,7 +10,7 @@
                     <li class="breadcrumb-item active text-dark" aria-current="page"><%= data.title %></li>
                 </ol>
             </nav>
-            <h2 class="fw-bold mb-1"><%= data.title %></h2>
+            <h2 class="fw-bold mb-1 fs-3 fs-md-2"><%= data.title %></h2>
             <p class="text-muted fs-6 mb-3">
                 <i class="fa-solid fa-star text-warning"></i> 4.9 &nbsp;·&nbsp; 
                 <span class="text-decoration-underline"><%= data.reviews ? data.reviews.length : 0 %> reviews</span> &nbsp;·&nbsp; 
@@ -20,27 +20,27 @@
     </div>
 
     <!-- Main Content 2-Column Grid -->
-    <div class="row g-5">
+    <div class="row g-4 g-lg-5">
         <!-- Left Column -->
         <div class="col-12 col-lg-8">
             <!-- Hero Image -->
             <div class="position-relative mb-4">
-                <img src="<%= data.image.url %>" class="card-img-top" alt="Listing Image" style="height: 25rem; object-fit: cover; border-radius: 1.5rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.12);">
+                <img src="<%= data.image.url %>" class="card-img-top show-image" alt="Listing Image" style="height: 24rem; object-fit: cover;">
             </div>
 
             <!-- Host Info -->
             <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
                 <div>
-                    <h5 class="fw-bold mb-0">Entire villa hosted by @<%= data.owner.username %></h5>
+                    <h5 class="fw-bold mb-0">Entire stay hosted by @<%= data.owner.username %></h5>
                     <p class="text-muted mb-0" style="font-size: 0.9rem;">4 guests · 2 bedrooms · 2 beds · 2 private baths</p>
                 </div>
-                <div class="w-12 h-12 rounded-circle bg-light border d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 50%;">
+                <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 50%;">
                     <i class="fa-solid fa-user fs-5 text-secondary"></i>
                 </div>
             </div>
 
             <!-- Property Perks -->
-            <div class="py-4 border-bottom">
+            <div class="py-3 border-bottom">
                 <div class="d-flex gap-3 mb-3">
                     <i class="fa-solid fa-medal fs-4 text-danger mt-1"></i>
                     <div>
@@ -65,8 +65,8 @@
             </div>
 
             <!-- Description -->
-            <div class="py-4 border-bottom">
-                <h5 class="fw-bold mb-3">About this space</h5>
+            <div class="py-3 border-bottom">
+                <h5 class="fw-bold mb-2">About this space</h5>
                 <p class="text-secondary leading-relaxed fs-6">
                     <%= data.description %>
                 </p>
@@ -91,7 +91,7 @@
             <div class="py-4 border-bottom">
                 <h5 class="fw-bold mb-1">Where you will be</h5>
                 <p class="text-muted mb-3"><i class="fa-solid fa-location-dot text-danger"></i> <%= data.location %>, <%= data.country %></p>
-                <div id="map" style="height: 320px; width: 100%; border-radius: 1.25rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08); z-index: 1;"></div>
+                <div id="map"></div>
             </div>
 
             <!-- Leave a Review Form -->
@@ -162,7 +162,7 @@
 
         <!-- Right Column: Sticky Airbnb Reservation Card -->
         <div class="col-12 col-lg-4">
-            <div class="card p-4 reservation-card bg-white sticky-top" style="top: 6rem; z-index: 10;">
+            <div class="card p-3 p-md-4 reservation-card bg-white sticky-top" style="top: 5.5rem; z-index: 10;">
                 <div class="d-flex justify-content-between align-items-baseline mb-3">
                     <div>
                         <span class="fs-4 fw-bold text-dark">&#8377; <%= Number(data.price).toLocaleString("en-IN") %></span>
@@ -268,7 +268,7 @@
                 <div id="modalSuccessBox" class="alert alert-success d-none text-center mb-0">
                     <h6 class="fw-bold mb-1"><i class="fa-solid fa-circle-check"></i> Booking Confirmed!</h6>
                     <small>Reservation ID: <strong>#WL-<%= Math.floor(100000 + Math.random() * 900000) %></strong></small> <br>
-                    <small class="text-muted">A confirmation email has been sent to host @<%= data.owner.username %>.</small>
+                    <small class="text-muted">A confirmation has been sent to your registered account.</small>
                 </div>
             </div>
             <div class="modal-footer border-top-0 pt-0" id="modalFooterBtns">
@@ -284,33 +284,91 @@
 <!-- Map and Live Pricing Calculation Script -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // 1. Map Initialization
-        const locationQuery = "<%= data.location %>, <%= data.country %>";
+        // 1. Rock-Solid Leaflet Map Initialization with Direct Fallback Dictionary
         const mapContainer = document.getElementById("map");
-        if (mapContainer) {
-            let defaultLat = 20.5937;
-            let defaultLng = 78.9629;
-            const map = L.map("map").setView([defaultLat, defaultLng], 5);
+        if (mapContainer && typeof L !== "undefined") {
+            // Fix Leaflet Default Marker Icons
+            delete L.Icon.Default.prototype._getIconUrl;
+            L.Icon.Default.mergeOptions({
+                iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+                iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+                shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            });
+
+            // Coordinate Lookup Dictionary for instant zero-latency loading
+            const cityCoords = {
+                "goa": [15.2993, 74.1240],
+                "candolim": [15.5173, 73.7634],
+                "bengaluru": [12.9716, 77.5946],
+                "bangalore": [12.9716, 77.5946],
+                "paris": [48.8566, 2.3522],
+                "manali": [32.2432, 77.1892],
+                "udaipur": [24.5854, 73.7125],
+                "santorini": [36.3932, 25.4615],
+                "oia": [36.4618, 25.3753],
+                "jaisalmer": [26.9157, 70.9083],
+                "coorg": [12.3375, 75.8069],
+                "madikeri": [12.4244, 75.7382],
+                "tromso": [69.6492, 18.9553],
+                "tromsø": [69.6492, 18.9553],
+                "kodaikanal": [10.2381, 77.4892],
+                "alleppey": [9.4981, 76.3388],
+                "alappuzha": [9.4981, 76.3388],
+                "mumbai": [19.0760, 72.8777],
+                "delhi": [28.6139, 77.2090],
+                "jaipur": [26.9124, 75.7873],
+                "france": [46.2276, 2.2137],
+                "greece": [39.0742, 21.8243],
+                "norway": [60.4720, 8.4689],
+                "india": [20.5937, 78.9629]
+            };
+
+            const locStr = "<%= data.location %>".toLowerCase();
+            const countryStr = "<%= data.country %>".toLowerCase();
+            
+            let matchedLat = 20.5937;
+            let matchedLng = 78.9629;
+            let zoomLevel = 11;
+
+            // Check dictionary match
+            for (let key in cityCoords) {
+                if (locStr.includes(key) || countryStr.includes(key)) {
+                    matchedLat = cityCoords[key][0];
+                    matchedLng = cityCoords[key][1];
+                    break;
+                }
+            }
+
+            const map = L.map("map", { scrollWheelZoom: false }).setView([matchedLat, matchedLng], zoomLevel);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: "OpenStreetMap"
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
             }).addTo(map);
 
-            fetch("https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(locationQuery))
+            const marker = L.marker([matchedLat, matchedLng]).addTo(map);
+            marker.bindPopup("<div class='p-1'><strong><%= data.title %></strong><br><small class='text-muted'><%= data.location %>, <%= data.country %></small></div>").openPopup();
+
+            // Refresh map tile layout
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 250);
+            window.addEventListener("resize", () => {
+                map.invalidateSize();
+            });
+
+            // Async Geocoder refinement if available
+            fetch("https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent("<%= data.location %>, <%= data.country %>"))
                 .then(res => res.json())
-                .then(data => {
-                    if (data && data.length > 0) {
-                        const lat = parseFloat(data[0].lat);
-                        const lon = parseFloat(data[0].lon);
-                        map.setView([lat, lon], 12);
-                        const marker = L.marker([lat, lon]).addTo(map);
-                        marker.bindPopup("<b><%= data.title %></b><br><%= data.location %>, <%= data.country %>").openPopup();
-                    } else {
-                        const marker = L.marker([defaultLat, defaultLng]).addTo(map);
-                        marker.bindPopup("<b><%= data.title %></b><br><%= data.location %>").openPopup();
+                .then(results => {
+                    if (results && results.length > 0) {
+                        const newLat = parseFloat(results[0].lat);
+                        const newLon = parseFloat(results[0].lon);
+                        map.setView([newLat, newLon], 13);
+                        marker.setLatLng([newLat, newLon]);
                     }
                 })
-                .catch(err => console.log("Map error:", err));
+                .catch(e => console.log("Geocoding notice:", e));
         }
 
         // 2. Dynamic Booking Calculations & Modal Linking
@@ -348,16 +406,15 @@
                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 if (diffDays <= 0) diffDays = 1;
 
-                nightsCount.innerText = diffDays;
+                if (nightsCount) nightsCount.innerText = diffDays;
                 const base = pricePerNight * diffDays;
-                baseTotal.innerText = "₹ " + base.toLocaleString("en-IN");
+                if (baseTotal) baseTotal.innerText = "₹ " + base.toLocaleString("en-IN");
                 const totalWithFees = base + 1200 + 850;
-                grandTotal.innerText = "₹ " + totalWithFees.toLocaleString("en-IN");
+                if (grandTotal) grandTotal.innerText = "₹ " + totalWithFees.toLocaleString("en-IN");
 
-                // Update Modal Content
                 if (modalDates) modalDates.innerText = checkIn.value + " to " + checkOut.value;
                 if (modalNights) modalNights.innerText = diffDays + " Night" + (diffDays > 1 ? "s" : "");
-                if (modalGuests) modalGuests.innerText = guestSelect.value + (guestSelect.value === "1" ? " Guest" : " Guests");
+                if (modalGuests) modalGuests.innerText = (guestSelect ? guestSelect.value : "2") + " Guests";
                 if (modalTotal) modalTotal.innerText = "₹ " + totalWithFees.toLocaleString("en-IN");
             }
 
@@ -368,13 +425,12 @@
             checkOut.addEventListener("change", calculatePrice);
             if (guestSelect) guestSelect.addEventListener("change", calculatePrice);
 
-            // Initial calculation
             calculatePrice();
         }
 
         if (confirmBtn) {
             confirmBtn.addEventListener("click", () => {
-                modalSuccess.classList.remove("d-none");
+                if (modalSuccess) modalSuccess.classList.remove("d-none");
                 confirmBtn.classList.add("d-none");
             });
         }
