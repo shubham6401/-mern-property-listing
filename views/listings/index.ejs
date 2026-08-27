@@ -1,87 +1,91 @@
 <%- layout("/layouts/boilerplate.ejs") %>
 
-<!-- Category Filters & Tax Toggle -->
-<div id="filters">
-    <a href="/listings?category=Trending" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Trending" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
-    </a>
-    <a href="/listings?category=Rooms" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Rooms" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-    </a>
-    <a href="/listings?category=Iconic Cities" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Iconic Cities" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-mountain-city"></i></div>
-        <p>Iconic Cities</p>
-    </a>
-    <a href="/listings?category=Mountains" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Mountains" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-mountain"></i></div>
-        <p>Mountains</p>
-    </a>
-    <a href="/listings?category=Castles" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Castles" ? "active-filter" : "" %>">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
-    </a>
-    <a href="/listings?category=Amazing Pools" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Amazing Pools" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Amazing Pools</p>
-    </a>
-    <a href="/listings?category=Camping" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Camping" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-    </a>
-    <a href="/listings?category=Farms" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Farms" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-cow"></i></div>
-        <p>Farms</p>
-    </a>
-    <a href="/listings?category=Arctic" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Arctic" ? "active-filter" : "" %>">
-        <div><i class="fa-regular fa-snowflake"></i></div>
-        <p>Arctic</p>
-    </a>
-    <a href="/listings?category=Domes" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Domes" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Domes</p>
-    </a>
-    <a href="/listings?category=Boats" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Boats" ? "active-filter" : "" %>">
-        <div><i class="fa-solid fa-ship"></i></div>
-        <p>Boats</p>
-    </a>
+<!-- Category Filters & Tax Toggle Wrapper -->
+<div class="filters-wrapper">
+    <div id="filters">
+        <a href="/listings?category=Trending" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Trending" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </a>
+        <a href="/listings?category=Rooms" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Rooms" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </a>
+        <a href="/listings?category=Iconic Cities" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Iconic Cities" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic Cities</p>
+        </a>
+        <a href="/listings?category=Mountains" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Mountains" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-mountain"></i></div>
+            <p>Mountains</p>
+        </a>
+        <a href="/listings?category=Castles" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Castles" ? "active-filter" : "" %>">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+        </a>
+        <a href="/listings?category=Amazing Pools" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Amazing Pools" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing Pools</p>
+        </a>
+        <a href="/listings?category=Camping" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Camping" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+        </a>
+        <a href="/listings?category=Farms" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Farms" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+        </a>
+        <a href="/listings?category=Arctic" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Arctic" ? "active-filter" : "" %>">
+            <div><i class="fa-regular fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </a>
+        <a href="/listings?category=Domes" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Domes" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Domes</p>
+        </a>
+        <a href="/listings?category=Boats" class="filter <%= typeof selectedCategory !== "undefined" && selectedCategory === "Boats" ? "active-filter" : "" %>">
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Boats</p>
+        </a>
+    </div>
 
     <!-- Tax Switch Toggle -->
     <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" style="cursor: pointer;">
-            <label class="form-check-label" for="flexSwitchCheckDefault" style="cursor: pointer; font-size: 0.85rem; font-weight: 600;">Display total after taxes</label>
+        <div class="form-check form-switch d-flex align-items-center justify-content-between w-100 m-0 p-0">
+            <label class="form-check-label me-3" for="flexSwitchCheckDefault" style="cursor: pointer; font-size: 0.85rem; font-weight: 600;">Display total after taxes</label>
+            <input class="form-check-input float-none ms-auto" type="checkbox" role="switch" id="flexSwitchCheckDefault" style="cursor: pointer;">
         </div>
     </div>
 </div>
 
 <% if (data.length === 0) { %>
-    <div class="alert alert-warning mt-4 text-center" role="alert">
-        <h5>No listings found matching your search.</h5>
-        <p class="mb-0"><a href="/listings" class="alert-link">Click here to view all available listings</a></p>
+    <div class="alert alert-warning mt-4 text-center py-4 rounded-4" role="alert">
+        <i class="fa-solid fa-magnifying-glass fs-3 text-warning mb-2"></i>
+        <h5 class="fw-bold">No listings found</h5>
+        <p class="text-muted mb-0">We couldn't find any stays matching your criteria. <a href="/listings" class="alert-link text-danger fw-bold">View all listings</a></p>
     </div>
 <% } %>
 
-<!-- Listings Cards Grid -->
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+<!-- Listings Cards Grid (Single Listing Per Row on Mobile) -->
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-1">
     <% for(let listing of data) { %>
-        <div class="col listing-card-wrapper mb-4 position-relative">
+        <div class="col listing-card-wrapper">
             <!-- Wishlist Button -->
-            <button type="button" class="wishlist-btn" data-id="<%= listing._id %>" onclick="toggleWishlist(event, this, '<%= listing._id %>')" title="Save to wishlist">
+            <button type="button" class="wishlist-btn" data-id="<%= listing._id %>" onclick="toggleWishlist(event, this, '<%= listing._id %>')" title="Save to wishlist" aria-label="Save to wishlist">
                 <i class="fa-regular fa-heart"></i>
             </button>
 
-            <a class="card-link text-decoration-none" href="/listings/<%= listing._id %>">
+            <a class="card-link" href="/listings/<%= listing._id %>">
                 <div class="card listing-card h-100">
-                    <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image" style="height: 20rem; border-radius: 1rem; object-fit: cover;">
-                    <div class="card-body pt-2">
-                        <p class="card-text text-dark">
-                            <b class="fs-6"><%= listing.title %></b> <br>
-                            <span class="text-muted fs-6"><i class="fa-solid fa-location-dot text-danger"></i> <%= listing.location %>, <%= listing.country %></span> <br>
-                            <span class="fw-bold mt-1 d-inline-block">&#8377; <%= Number(listing.price).toLocaleString("en-IN") %></span> <span class="text-muted">/ night</span>
-                            <i class="tax-info"> &nbsp; &nbsp;+18% GST (&#8377; <%= Number(listing.price * 1.18).toLocaleString("en-IN", {maximumFractionDigits: 0}) %> total)</i>
-                        </p>
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" loading="lazy">
+                    <div class="card-body">
+                        <div class="listing-title"><%= listing.title %></div>
+                        <div class="listing-location"><i class="fa-solid fa-location-dot text-danger me-1"></i><%= listing.location %>, <%= listing.country %></div>
+                        <div class="listing-price-tag">
+                            <span>&#8377; <%= Number(listing.price).toLocaleString("en-IN") %></span>
+                            <span class="text-muted fw-normal" style="font-size: 0.85rem;"> / night</span>
+                            <span class="tax-info"> &nbsp;·&nbsp; &#8377; <%= Number(listing.price * 1.18).toLocaleString("en-IN", {maximumFractionDigits: 0}) %> incl. taxes</span>
+                        </div>
                     </div>
                 </div>
             </a>
@@ -133,7 +137,6 @@
                 }
             })
             .catch(() => {
-                // Local fallback toggle
                 const icon = btn.querySelector("i");
                 const isSaved = btn.classList.toggle("active-heart");
                 if (isSaved) {
@@ -148,24 +151,6 @@
                     localStorage.removeItem("wishlist_" + listingId);
                 }
             });
-        return;
-        if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        const icon = btn.querySelector("i");
-        const isSaved = btn.classList.toggle("active-heart");
-        if (isSaved) {
-            icon.classList.remove("fa-regular");
-            icon.classList.add("fa-solid");
-            icon.style.color = "#fe424d";
-            localStorage.setItem("wishlist_" + listingId, "true");
-        } else {
-            icon.classList.remove("fa-solid");
-            icon.classList.add("fa-regular");
-            icon.style.color = "#222222";
-            localStorage.removeItem("wishlist_" + listingId);
-        }
     }
 
     // Load saved wishlist hearts

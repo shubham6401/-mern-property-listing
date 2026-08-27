@@ -1,64 +1,60 @@
-
-
-
-
 <% layout("/layouts/boilerplate.ejs") %>
 
-    <body>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        <div class="form-card">
+            <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                <a href="/listings/<%= data._id %>" class="btn btn-sm btn-outline-secondary rounded-circle me-1" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-solid fa-arrow-left"></i></a>
+                <div>
+                    <h3 class="fw-bold mb-0">Edit Listing</h3>
+                    <p class="text-muted small mb-0">Update information for "<%= data.title %>"</p>
+                </div>
+            </div>
 
-        <div class="row">
-            <div class="col-12 col-md-8 offset-md-2 mt-3 p-3 bg-white rounded-4 border shadow-sm">
-                <h1 class="mb-3">Edit Listing</h1>
-                <form method="post" class="needs-validation" enctype="multipart/form-data" novalidate action="/listings/<%=data._id%>/edit?_method=PUT">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" required name="listing[title]" value="<%=data.title%>" class="form-control">
-                        <div class="invalid-feedback">Enter Valid Title</div>
- 
+            <form method="post" class="needs-validation" enctype="multipart/form-data" novalidate action="/listings/<%= data._id %>/edit?_method=PUT">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Property Title</label>
+                    <input id="title" type="text" required name="listing[title]" value="<%= data.title %>" class="form-control shadow-none">
+                    <div class="invalid-feedback">Please enter a property title.</div>
+                </div>
 
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" rows="4" required name="listing[description]" class="form-control shadow-none"><%= data.description %></textarea>
+                    <div class="invalid-feedback">Please enter a description.</div>
+                </div>
+
+                <!-- Current Image & Upload New -->
+                <div class="mb-3">
+                    <label class="form-label d-block">Current Image</label>
+                    <div class="mb-2">
+                        <img src="<%= data.image.url %>" alt="Current listing photo" class="rounded-3 shadow-xs" style="width: 140px; height: 95px; object-fit: cover;">
                     </div>
+                    <label for="image" class="form-label">Replace Image (optional)</label>
+                    <input id="image" type="file" name="listing[image][url]" class="form-control shadow-none">
+                </div>
 
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea rows="5" required cols="30" type="text" name="listing[description]"
-                            class="form-control"> <%=data.description%></textarea>
-                        <div class="Enter Some Description">Enter Valid Title</div>
-
-
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Upload new image</label>
-                        <input type="file"  name="listing[image][url]"  class="form-control" >
-                        <!-- <div class="invalid-feedback">Enter Valid link</div> -->
-
-
-                    </div>
-                    <div class="row ">
-
-
-
-                        <div class="mb-3 col-md-4">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="number" required name="listing[price]" value="<%=data.price%>" class="form-control">
-                        <div class="invalid-feedback">Enter Price</div>
-
-
-                        </div>
-
-                        <div class="mb-3 col-md-8">
-                            <label for="country" class="form-label">Country</label>
-                            <input type="text" required name="listing[country]" value="<%=data.country%>" class="form-control">
-                        <div class="invalid-feedback">Enter Country</div>
-
-
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-5">
+                        <label for="price" class="form-label">Price (&#8377; / night)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">&#8377;</span>
+                            <input id="price" type="number" required name="listing[price]" value="<%= data.price %>" class="form-control shadow-none">
+                            <div class="invalid-feedback">Please enter price.</div>
                         </div>
                     </div>
 
-                    
-                    <div class="mb-3">
+                    <div class="col-12 col-md-7">
+                        <label for="country" class="form-label">Country</label>
+                        <input id="country" type="text" required name="listing[country]" value="<%= data.country %>" class="form-control shadow-none">
+                        <div class="invalid-feedback">Please enter country.</div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-5">
                         <label for="category" class="form-label">Category</label>
-                        <select name="listing[category]" class="form-select" required>
+                        <select id="category" name="listing[category]" class="form-select shadow-none" required>
                             <option value="Trending" <%= data.category === "Trending" ? "selected" : "" %>>🔥 Trending</option>
                             <option value="Rooms" <%= data.category === "Rooms" ? "selected" : "" %>>🛏️ Rooms</option>
                             <option value="Iconic Cities" <%= data.category === "Iconic Cities" ? "selected" : "" %>>🏙️ Iconic Cities</option>
@@ -72,15 +68,19 @@
                             <option value="Boats" <%= data.category === "Boats" ? "selected" : "" %>>🚢 Boats</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="location" class="form-label">Location</label>
-                        <input type="text" required name="listing[location]" value="<%=data.location%>" class="form-control">
-                        <div class="invalid-feedback">Enter Location</div>
 
+                    <div class="col-12 col-md-7">
+                        <label for="location" class="form-label">Location / City</label>
+                        <input id="location" type="text" required name="listing[location]" value="<%= data.location %>" class="form-control shadow-none">
+                        <div class="invalid-feedback">Please enter location.</div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3">Edit</button>
-                </form>
-            </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/listings/<%= data._id %>" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4 py-2"><i class="fa-solid fa-check me-1"></i> Save Changes</button>
+                </div>
+            </form>
         </div>
-        <script src="/js/script.js"></script>
-    </body>
+    </div>
+</div>
