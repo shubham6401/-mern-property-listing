@@ -55,6 +55,23 @@
                         </div>
                     </div>
 
+                    
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select name="listing[category]" class="form-select" required>
+                            <option value="Trending" <%= data.category === "Trending" ? "selected" : "" %>>🔥 Trending</option>
+                            <option value="Rooms" <%= data.category === "Rooms" ? "selected" : "" %>>🛏️ Rooms</option>
+                            <option value="Iconic Cities" <%= data.category === "Iconic Cities" ? "selected" : "" %>>🏙️ Iconic Cities</option>
+                            <option value="Mountains" <%= data.category === "Mountains" ? "selected" : "" %>>🏔️ Mountains</option>
+                            <option value="Castles" <%= data.category === "Castles" ? "selected" : "" %>>🏰 Castles</option>
+                            <option value="Amazing Pools" <%= data.category === "Amazing Pools" ? "selected" : "" %>>🏊 Amazing Pools</option>
+                            <option value="Camping" <%= data.category === "Camping" ? "selected" : "" %>>⛺ Camping</option>
+                            <option value="Farms" <%= data.category === "Farms" ? "selected" : "" %>>🌾 Farms</option>
+                            <option value="Arctic" <%= data.category === "Arctic" ? "selected" : "" %>>❄️ Arctic</option>
+                            <option value="Domes" <%= data.category === "Domes" ? "selected" : "" %>>🛖 Domes</option>
+                            <option value="Boats" <%= data.category === "Boats" ? "selected" : "" %>>🚢 Boats</option>
+                        </select>
+                    </div>
                     <div class="mb-3">
                         <label for="location" class="form-label">Location</label>
                         <input type="text" required name="listing[location]" value="<%=data.location%>" class="form-control">
