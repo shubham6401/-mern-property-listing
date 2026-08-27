@@ -430,8 +430,34 @@
 
         if (confirmBtn) {
             confirmBtn.addEventListener("click", () => {
-                if (modalSuccess) modalSuccess.classList.remove("d-none");
-                confirmBtn.classList.add("d-none");
+                const bookingData = {
+                    checkIn: checkIn ? checkIn.value : "",
+                    checkOut: checkOut ? checkOut.value : "",
+                    guests: guestSelect ? guestSelect.value + " Guests" : "2 Guests",
+                    totalPrice: pricePerNight * (parseInt(nightsCount ? nightsCount.innerText : "1") || 1) + 2050
+                };
+
+                fetch("/user/book/<%= data._id %>", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(bookingData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        if (modalSuccess) {
+                            modalSuccess.innerHTML = '<h6 class="fw-bold mb-1"><i class="fa-solid fa-circle-check"></i> Booking Confirmed!</h6><small>Reservation ID: <strong>#' + data.bookingId + '</strong></small><br><small class="text-muted">View this reservation anytime in your <a href="/user/profile" class="alert-link fw-bold">Profile</a>.</small>';
+                            modalSuccess.classList.remove("d-none");
+                        }
+                        confirmBtn.classList.add("d-none");
+                    } else {
+                        alert(data.message || "Please log in to confirm booking.");
+                    }
+                })
+                .catch(err => {
+                    if (modalSuccess) modalSuccess.classList.remove("d-none");
+                    confirmBtn.classList.add("d-none");
+                });
             });
         }
     });

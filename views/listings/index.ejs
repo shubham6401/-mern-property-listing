@@ -110,6 +110,49 @@
             e.preventDefault();
             e.stopPropagation();
         }
+        fetch("/user/wishlist/" + listingId, { method: "POST" })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const icon = btn.querySelector("i");
+                    if (data.saved) {
+                        btn.classList.add("active-heart");
+                        icon.classList.remove("fa-regular");
+                        icon.classList.add("fa-solid");
+                        icon.style.color = "#fe424d";
+                        localStorage.setItem("wishlist_" + listingId, "true");
+                    } else {
+                        btn.classList.remove("active-heart");
+                        icon.classList.remove("fa-solid");
+                        icon.classList.add("fa-regular");
+                        icon.style.color = "#222222";
+                        localStorage.removeItem("wishlist_" + listingId);
+                    }
+                } else if (data.message) {
+                    alert(data.message);
+                }
+            })
+            .catch(() => {
+                // Local fallback toggle
+                const icon = btn.querySelector("i");
+                const isSaved = btn.classList.toggle("active-heart");
+                if (isSaved) {
+                    icon.classList.remove("fa-regular");
+                    icon.classList.add("fa-solid");
+                    icon.style.color = "#fe424d";
+                    localStorage.setItem("wishlist_" + listingId, "true");
+                } else {
+                    icon.classList.remove("fa-solid");
+                    icon.classList.add("fa-regular");
+                    icon.style.color = "#222222";
+                    localStorage.removeItem("wishlist_" + listingId);
+                }
+            });
+        return;
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         const icon = btn.querySelector("i");
         const isSaved = btn.classList.toggle("active-heart");
         if (isSaved) {
