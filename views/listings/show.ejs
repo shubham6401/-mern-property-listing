@@ -5,13 +5,13 @@
     <div class="row">
         <div class="col-12">
             <nav aria-label="breadcrumb" class="mb-2">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb" style="word-break: break-word;">
                     <li class="breadcrumb-item"><a href="/listings" class="text-decoration-none text-muted"><i class="fa-solid fa-arrow-left"></i> All Listings</a></li>
                     <li class="breadcrumb-item active text-dark" aria-current="page"><%= data.title %></li>
                 </ol>
             </nav>
-            <h2 class="fw-bold mb-1 fs-3 fs-md-2"><%= data.title %></h2>
-            <p class="text-muted fs-6 mb-3">
+            <h2 class="fw-bold mb-1 fs-3 fs-md-2" style="word-break: break-word; overflow-wrap: anywhere;"><%= data.title %></h2>
+            <p class="text-muted fs-6 mb-3" style="word-break: break-word;">
                 <i class="fa-solid fa-star text-warning"></i> 4.9 &nbsp;·&nbsp; 
                 <span class="text-decoration-underline"><%= data.reviews ? data.reviews.length : 0 %> reviews</span> &nbsp;·&nbsp; 
                 <i class="fa-solid fa-location-dot text-danger"></i> <%= data.location %>, <%= data.country %>
@@ -22,19 +22,19 @@
     <!-- Main Content 2-Column Grid -->
     <div class="row g-4 g-lg-5">
         <!-- Left Column -->
-        <div class="col-12 col-lg-8">
-            <!-- Hero Image -->
-            <div class="position-relative mb-4">
-                <img src="<%= data.image.url %>" class="card-img-top show-image" alt="<%= data.title %>">
+        <div class="col-12 col-lg-8 min-w-0">
+            <!-- Hero Image Container -->
+            <div class="show-image-container mb-4">
+                <img src="<%= data.image.url %>" class="show-image" alt="<%= data.title %>">
             </div>
 
             <!-- Host Info -->
-            <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                <div>
-                    <h5 class="fw-bold mb-0">Entire stay hosted by @<%= data.owner.username %></h5>
+            <div class="d-flex justify-content-between align-items-center py-3 border-bottom flex-wrap gap-2">
+                <div class="min-w-0">
+                    <h5 class="fw-bold mb-0 text-truncate">Entire stay hosted by @<%= data.owner.username %></h5>
                     <p class="text-muted mb-0" style="font-size: 0.9rem;">4 guests · 2 bedrooms · 2 beds · 2 private baths</p>
                 </div>
-                <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 50%;">
+                <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; border-radius: 50%;">
                     <i class="fa-solid fa-user fs-5 text-secondary"></i>
                 </div>
             </div>
@@ -42,21 +42,21 @@
             <!-- Property Perks -->
             <div class="py-3 border-bottom">
                 <div class="d-flex gap-3 mb-3">
-                    <i class="fa-solid fa-medal fs-4 text-danger mt-1"></i>
+                    <i class="fa-solid fa-medal fs-4 text-danger mt-1 flex-shrink-0"></i>
                     <div>
                         <h6 class="fw-bold mb-0">Experienced Host</h6>
                         <p class="text-muted mb-0" style="font-size: 0.88rem;">@<%= data.owner.username %> has 100% 5-star ratings from recent guests.</p>
                     </div>
                 </div>
                 <div class="d-flex gap-3 mb-3">
-                    <i class="fa-solid fa-location-dot fs-4 text-danger mt-1"></i>
+                    <i class="fa-solid fa-location-dot fs-4 text-danger mt-1 flex-shrink-0"></i>
                     <div>
                         <h6 class="fw-bold mb-0">Great Location</h6>
                         <p class="text-muted mb-0" style="font-size: 0.88rem;">95% of recent guests gave the location a 5-star rating.</p>
                     </div>
                 </div>
                 <div class="d-flex gap-3">
-                    <i class="fa-solid fa-key fs-4 text-danger mt-1"></i>
+                    <i class="fa-solid fa-key fs-4 text-danger mt-1 flex-shrink-0"></i>
                     <div>
                         <h6 class="fw-bold mb-0">Seamless Check-in</h6>
                         <p class="text-muted mb-0" style="font-size: 0.88rem;">Self check-in with smart lock available 24/7.</p>
@@ -67,7 +67,7 @@
             <!-- Description -->
             <div class="py-3 border-bottom">
                 <h5 class="fw-bold mb-2">About this space</h5>
-                <p class="text-secondary leading-relaxed fs-6">
+                <p class="text-secondary leading-relaxed fs-6" style="word-break: break-word; overflow-wrap: anywhere; white-space: pre-line;">
                     <%= data.description %>
                 </p>
                 <% if(data.category) { %>
@@ -101,7 +101,7 @@
                     <form class="needs-validation" novalidate method="post" action="/listings/<%= data._id %>/reviews">
                         <div class="mb-3">
                             <label for="rating" class="form-label fw-semibold">Rating</label>
-                            <fieldset class="starability-slot">
+                            <fieldset class="starability-slot" style="max-width: 100%;">
                                 <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
                                 <input type="radio" id="first-rate1" name="review[rating]" value="1" />
                                 <label for="first-rate1" title="Terrible">1 star</label>
@@ -118,7 +118,7 @@
 
                         <div class="mb-3">
                             <label for="comment" class="form-label fw-semibold">Your Feedback</label>
-                            <textarea cols="30" rows="3" required class="form-control" name="review[comment]" placeholder="Share your experience at this property..."></textarea>
+                            <textarea id="comment" cols="30" rows="3" required class="form-control shadow-none" name="review[comment]" placeholder="Share your experience at this property..."></textarea>
                             <div class="invalid-feedback">Please enter a review comment.</div>
                         </div>
                         <button class="btn btn-dark px-4 py-2">Submit Review</button>
@@ -136,16 +136,16 @@
                                 <div class="card h-100 p-3 shadow-xs border rounded-3 bg-white">
                                     <div class="card-body p-0">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="card-title fw-bold mb-0">@<%= review.author.username %></h6>
+                                            <h6 class="card-title fw-bold mb-0 text-truncate">@<%= review.author.username %></h6>
                                         </div>
                                         <p class="card-text text-warning my-1">
                                             <%= "⭐".repeat(review.rating || 1) %>
                                         </p>
-                                        <p class="card-text text-secondary mb-2" style="font-size: 0.9rem;">
+                                        <p class="card-text text-secondary mb-2" style="font-size: 0.9rem; word-break: break-word; overflow-wrap: anywhere;">
                                             "<%= review.comment %>"
                                         </p>
                                         <% if(currUser && currUser._id.equals(review.author._id)) { %> 
-                                            <form method="post" action="/listings/<%= data._id %>/reviews/<%= review._id %>?_method=DELETE" class="mt-2">
+                                             <form method="post" action="/listings/<%= data._id %>/reviews/<%= review._id %>?_method=DELETE" class="mt-2">
                                                 <button class="btn btn-sm btn-outline-danger">Delete</button>
                                             </form>
                                         <% } %>
@@ -161,9 +161,9 @@
         </div>
 
         <!-- Right Column: Sticky Airbnb Reservation Card -->
-        <div class="col-12 col-lg-4">
-            <div class="card p-3 p-md-4 reservation-card bg-white sticky-top" style="top: 5.5rem; z-index: 10;">
-                <div class="d-flex justify-content-between align-items-baseline mb-3">
+        <div class="col-12 col-lg-4 min-w-0">
+            <div class="card p-3 p-md-4 reservation-card bg-white sticky-top">
+                <div class="d-flex justify-content-between align-items-baseline mb-3 flex-wrap gap-2">
                     <div>
                         <span class="fs-4 fw-bold text-dark">&#8377; <%= Number(data.price).toLocaleString("en-IN") %></span>
                         <span class="text-muted"> / night</span>
@@ -176,11 +176,11 @@
                 <!-- Date Inputs Container -->
                 <div class="border rounded-3 p-2 mb-3">
                     <div class="row g-2">
-                        <div class="col-6 border-end pe-2">
+                        <div class="col-6 border-end pe-2 min-w-0">
                             <label class="form-label text-uppercase text-muted fw-bold mb-1" style="font-size: 0.65rem;">CHECK-IN</label>
                             <input type="date" id="checkInDate" class="form-control form-control-sm border-0 p-0 shadow-none fw-semibold" style="font-size: 0.85rem;" required>
                         </div>
-                        <div class="col-6 ps-2">
+                        <div class="col-6 ps-2 min-w-0">
                             <label class="form-label text-uppercase text-muted fw-bold mb-1" style="font-size: 0.65rem;">CHECKOUT</label>
                             <input type="date" id="checkOutDate" class="form-control form-control-sm border-0 p-0 shadow-none fw-semibold" style="font-size: 0.85rem;" required>
                         </div>
@@ -198,7 +198,7 @@
                 </div>
 
                 <!-- Reserve Button triggering Modal -->
-                <button type="button" id="reserveBtn" class="btn btn-danger w-100 py-2 fw-bold fs-6 rounded-3 mb-2" style="background-color: #fe424d !important; border: none !important;" data-bs-toggle="modal" data-bs-target="#reservationModal">
+                <button type="button" id="reserveBtn" class="btn btn-primary w-100 py-2 fw-bold fs-6 rounded-3 mb-2" data-bs-toggle="modal" data-bs-target="#reservationModal">
                     <i class="fa-solid fa-bolt me-1"></i> Reserve Now
                 </button>
                 <p class="text-center text-muted mb-3" style="font-size: 0.8rem;">You will not be charged yet</p>
@@ -238,9 +238,9 @@
             </div>
             <div class="modal-body pt-3">
                 <div class="d-flex gap-3 align-items-center mb-3 p-2 bg-light rounded-3">
-                    <img src="<%= data.image.url %>" alt="<%= data.title %>" class="rounded-3" style="width: 80px; height: 60px; object-fit: cover;">
-                    <div>
-                        <h6 class="fw-bold mb-0"><%= data.title %></h6>
+                    <img src="<%= data.image.url %>" alt="<%= data.title %>" class="rounded-3 flex-shrink-0" style="width: 80px; height: 60px; object-fit: cover;">
+                    <div class="min-w-0">
+                        <h6 class="fw-bold mb-0 text-truncate"><%= data.title %></h6>
                         <small class="text-muted"><i class="fa-solid fa-location-dot text-danger"></i> <%= data.location %>, <%= data.country %></small>
                     </div>
                 </div>
@@ -273,7 +273,7 @@
             </div>
             <div class="modal-footer border-top-0 pt-0" id="modalFooterBtns">
                 <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="confirmBookingBtn" class="btn btn-danger px-4 fw-semibold" style="background-color: #fe424d !important; border: none !important;">
+                <button type="button" id="confirmBookingBtn" class="btn btn-primary px-4 fw-semibold">
                     Confirm & Reserve
                 </button>
             </div>
