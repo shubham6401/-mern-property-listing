@@ -66,16 +66,15 @@
 <!-- Listings Cards Grid -->
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     <% for(let listing of data) { %>
-        <div class="col listing-card-wrapper mb-4">
+        <div class="col listing-card-wrapper mb-4 position-relative">
             <!-- Wishlist Button -->
-            <button class="wishlist-btn" onclick="toggleWishlist(event, this, '<%= listing._id %>')" title="Save to wishlist">
+            <button type="button" class="wishlist-btn" data-id="<%= listing._id %>" onclick="toggleWishlist(event, this, '<%= listing._id %>')" title="Save to wishlist">
                 <i class="fa-regular fa-heart"></i>
             </button>
 
             <a class="card-link text-decoration-none" href="/listings/<%= listing._id %>">
                 <div class="card listing-card h-100">
                     <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing image" style="height: 20rem; border-radius: 1rem; object-fit: cover;">
-                    <div class="card-img-overlay"></div>
                     <div class="card-body pt-2">
                         <p class="card-text text-dark">
                             <b class="fs-6"><%= listing.title %></b> <br>
@@ -106,32 +105,38 @@
         });
     }
 
-    function toggleWishlist(event, btn, listingId) {
-        event.stopPropagation();
-        event.preventDefault();
-        btn.classList.toggle("active-heart");
+    function toggleWishlist(e, btn, listingId) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         const icon = btn.querySelector("i");
-        if (btn.classList.contains("active-heart")) {
+        const isSaved = btn.classList.toggle("active-heart");
+        if (isSaved) {
             icon.classList.remove("fa-regular");
             icon.classList.add("fa-solid");
+            icon.style.color = "#fe424d";
             localStorage.setItem("wishlist_" + listingId, "true");
         } else {
             icon.classList.remove("fa-solid");
             icon.classList.add("fa-regular");
+            icon.style.color = "#222222";
             localStorage.removeItem("wishlist_" + listingId);
         }
     }
 
     // Load saved wishlist hearts
-    document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".wishlist-btn").forEach(btn => {
-            const onclickAttr = btn.getAttribute("onclick");
-            const match = onclickAttr.match(/'([^']+)')$/);
-            if (match && localStorage.getItem("wishlist_" + match[1])) {
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".wishlist-btn").forEach(function (btn) {
+            const id = btn.getAttribute("data-id");
+            if (id && localStorage.getItem("wishlist_" + id) === "true") {
                 btn.classList.add("active-heart");
                 const icon = btn.querySelector("i");
-                icon.classList.remove("fa-regular");
-                icon.classList.add("fa-solid");
+                if (icon) {
+                    icon.classList.remove("fa-regular");
+                    icon.classList.add("fa-solid");
+                    icon.style.color = "#fe424d";
+                }
             }
         });
     });

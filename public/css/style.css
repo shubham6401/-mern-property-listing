@@ -207,3 +207,42 @@ body{
     border: 1px solid #e5e7eb;
     box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
 }
+
+
+/* Robust Wishlist Button */
+.listing-card-wrapper {
+    position: relative;
+}
+.wishlist-btn {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    width: 2.35rem;
+    height: 2.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #222222;
+    font-size: 1.15rem;
+    cursor: pointer;
+    z-index: 30;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.wishlist-btn:hover {
+    transform: scale(1.18);
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.wishlist-btn.active-heart {
+    background: #ffffff;
+    color: #fe424d !important;
+}
+.wishlist-btn.active-heart i {
+    font-weight: 900 !important;
+    color: #fe424d !important;
+}

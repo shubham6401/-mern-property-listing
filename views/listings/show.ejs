@@ -21,7 +21,7 @@
 
     <!-- Main Content 2-Column Grid -->
     <div class="row g-5">
-        <!-- Left Column: Image, Description, Amenities, Map, Reviews -->
+        <!-- Left Column -->
         <div class="col-12 col-lg-8">
             <!-- Hero Image -->
             <div class="position-relative mb-4">
@@ -197,8 +197,8 @@
                     </div>
                 </div>
 
-                <!-- Reserve Button with Instant Confirmation Alert -->
-                <button id="reserveBtn" class="btn btn-danger w-100 py-2 fw-bold fs-6 rounded-3 mb-2" style="background-color: #fe424d !important; border: none !important;">
+                <!-- Reserve Button triggering Modal -->
+                <button type="button" id="reserveBtn" class="btn btn-danger w-100 py-2 fw-bold fs-6 rounded-3 mb-2" style="background-color: #fe424d !important; border: none !important;" data-bs-toggle="modal" data-bs-target="#reservationModal">
                     <i class="fa-solid fa-bolt me-1"></i> Reserve Now
                 </button>
                 <p class="text-center text-muted mb-3" style="font-size: 0.8rem;">You will not be charged yet</p>
@@ -223,21 +223,68 @@
                         <span id="grandTotal">&#8377; <%= Number(data.price * 3 + 1200 + 850).toLocaleString("en-IN") %></span>
                     </div>
                 </div>
-
-                <!-- Success Confirmation Box -->
-                <div id="bookingConfirmation" class="alert alert-success mt-3 mb-0 d-none text-center" role="alert">
-                    <h6 class="fw-bold mb-1"><i class="fa-solid fa-circle-check"></i> Reservation Requested!</h6>
-                    <small>Host @<%= data.owner.username %> has been notified.</small>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Scripts for Map and Dynamic Booking Calculation -->
+<!-- Reservation Checkout Modal -->
+<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="reservationModalLabel"><i class="fa-solid fa-suitcase-rolling text-danger me-2"></i> Confirm Reservation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <div class="d-flex gap-3 align-items-center mb-3 p-2 bg-light rounded-3">
+                    <img src="<%= data.image.url %>" alt="<%= data.title %>" class="rounded-3" style="width: 80px; height: 60px; object-fit: cover;">
+                    <div>
+                        <h6 class="fw-bold mb-0"><%= data.title %></h6>
+                        <small class="text-muted"><i class="fa-solid fa-location-dot text-danger"></i> <%= data.location %>, <%= data.country %></small>
+                    </div>
+                </div>
+
+                <div class="border rounded-3 p-3 mb-3">
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="text-muted">Dates:</span>
+                        <span class="fw-semibold" id="modalDates">-</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="text-muted">Duration:</span>
+                        <span class="fw-semibold" id="modalNights">-</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="text-muted">Guests:</span>
+                        <span class="fw-semibold" id="modalGuests">2 Guests</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between py-1 fw-bold fs-6">
+                        <span>Total Payable:</span>
+                        <span class="text-danger" id="modalTotal">-</span>
+                    </div>
+                </div>
+
+                <div id="modalSuccessBox" class="alert alert-success d-none text-center mb-0">
+                    <h6 class="fw-bold mb-1"><i class="fa-solid fa-circle-check"></i> Booking Confirmed!</h6>
+                    <small>Reservation ID: <strong>#WL-<%= Math.floor(100000 + Math.random() * 900000) %></strong></small> <br>
+                    <small class="text-muted">A confirmation email has been sent to host @<%= data.owner.username %>.</small>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0" id="modalFooterBtns">
+                <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmBookingBtn" class="btn btn-danger px-4 fw-semibold" style="background-color: #fe424d !important; border: none !important;">
+                    Confirm & Reserve
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Map and Live Pricing Calculation Script -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // 1. Initialize Map
+        // 1. Map Initialization
         const locationQuery = "<%= data.location %>, <%= data.country %>";
         const mapContainer = document.getElementById("map");
         if (mapContainer) {
@@ -266,15 +313,22 @@
                 .catch(err => console.log("Map error:", err));
         }
 
-        // 2. Dynamic Booking Date & Price Calculations
+        // 2. Dynamic Booking Calculations & Modal Linking
         const pricePerNight = <%= Number(data.price) || 5000 %>;
         const checkIn = document.getElementById("checkInDate");
         const checkOut = document.getElementById("checkOutDate");
+        const guestSelect = document.getElementById("guestCount");
         const nightsCount = document.getElementById("nightsCount");
         const baseTotal = document.getElementById("basePriceTotal");
         const grandTotal = document.getElementById("grandTotal");
-        const reserveBtn = document.getElementById("reserveBtn");
-        const bookingConfirmation = document.getElementById("bookingConfirmation");
+
+        // Modal Elements
+        const modalDates = document.getElementById("modalDates");
+        const modalNights = document.getElementById("modalNights");
+        const modalGuests = document.getElementById("modalGuests");
+        const modalTotal = document.getElementById("modalTotal");
+        const confirmBtn = document.getElementById("confirmBookingBtn");
+        const modalSuccess = document.getElementById("modalSuccessBox");
 
         const today = new Date();
         const tomorrow = new Date(today);
@@ -297,7 +351,14 @@
                 nightsCount.innerText = diffDays;
                 const base = pricePerNight * diffDays;
                 baseTotal.innerText = "₹ " + base.toLocaleString("en-IN");
-                grandTotal.innerText = "₹ " + (base + 1200 + 850).toLocaleString("en-IN");
+                const totalWithFees = base + 1200 + 850;
+                grandTotal.innerText = "₹ " + totalWithFees.toLocaleString("en-IN");
+
+                // Update Modal Content
+                if (modalDates) modalDates.innerText = checkIn.value + " to " + checkOut.value;
+                if (modalNights) modalNights.innerText = diffDays + " Night" + (diffDays > 1 ? "s" : "");
+                if (modalGuests) modalGuests.innerText = guestSelect.value + (guestSelect.value === "1" ? " Guest" : " Guests");
+                if (modalTotal) modalTotal.innerText = "₹ " + totalWithFees.toLocaleString("en-IN");
             }
 
             checkIn.addEventListener("change", () => {
@@ -305,14 +366,16 @@
                 calculatePrice();
             });
             checkOut.addEventListener("change", calculatePrice);
+            if (guestSelect) guestSelect.addEventListener("change", calculatePrice);
+
+            // Initial calculation
+            calculatePrice();
         }
 
-        if (reserveBtn) {
-            reserveBtn.addEventListener("click", () => {
-                bookingConfirmation.classList.remove("d-none");
-                reserveBtn.classList.add("btn-success");
-                reserveBtn.classList.remove("btn-danger");
-                reserveBtn.innerHTML = "<i class="fa-solid fa-check me-1"></i> Reserved!";
+        if (confirmBtn) {
+            confirmBtn.addEventListener("click", () => {
+                modalSuccess.classList.remove("d-none");
+                confirmBtn.classList.add("d-none");
             });
         }
     });
