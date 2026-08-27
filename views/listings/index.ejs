@@ -66,45 +66,47 @@
     </div>
 <% } %>
 
-<!-- Responsive Listings Cards Grid (1 on Mobile, 2 on Tablet, 3 on Desktop) -->
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 g-md-4 mt-1">
+<!-- Responsive Listings Cards Grid: 1 on Mobile, 2 on Tablet, 3 on Desktop, 4 on Widescreen/Laptop -->
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3 g-md-4 mt-1">
     <% for(let listing of data) { %>
-        <div class="col listing-card-wrapper">
-            <a class="card-link" href="/listings/<%= listing._id %>">
-                <div class="card listing-card h-100">
-                    <!-- Image Container with Strict Aspect Ratio -->
-                    <div class="listing-card-img-container">
-                        <img src="<%= listing.image && listing.image.url ? listing.image.url : '/images/placeholder.jpg' %>" class="listing-card-img" alt="<%= listing.title %>" loading="lazy">
-                        
-                        <% if (listing.category) { %>
-                            <span class="listing-category-badge"><%= listing.category %></span>
-                        <% } %>
+        <div class="col">
+            <div class="listing-card-wrapper">
+                <a class="card-link" href="/listings/<%= listing._id %>">
+                    <div class="card listing-card h-100">
+                        <!-- Image Container with Strict Aspect Ratio -->
+                        <div class="listing-card-img-container">
+                            <img src="<%= listing.image && listing.image.url ? listing.image.url : '/images/placeholder.jpg' %>" class="listing-card-img" alt="<%= listing.title %>" loading="lazy">
+                            
+                            <% if (listing.category) { %>
+                                <span class="listing-category-badge"><%= listing.category %></span>
+                            <% } %>
 
-                        <!-- Floating Wishlist Button -->
-                        <button type="button" class="wishlist-btn" data-id="<%= listing._id %>" onclick="toggleWishlist(event, this, '<%= listing._id %>')" title="Save to wishlist" aria-label="Save to wishlist">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                    </div>
+                            <!-- Floating Wishlist Button -->
+                            <button type="button" class="wishlist-btn" data-id="<%= listing._id %>" onclick="toggleWishlist(event, this, '<%= listing._id %>')" title="Save to wishlist" aria-label="Save to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
 
-                    <!-- Card Body -->
-                    <div class="listing-card-body">
-                        <div>
-                            <div class="listing-title" title="<%= listing.title %>"><%= listing.title %></div>
-                            <div class="listing-location">
-                                <i class="fa-solid fa-location-dot text-danger me-1"></i>
-                                <%= listing.location ? listing.location : '' %><%= listing.location && listing.country ? ', ' : '' %><%= listing.country ? listing.country : '' %>
+                        <!-- Card Body -->
+                        <div class="listing-card-body">
+                            <div>
+                                <div class="listing-title" title="<%= listing.title %>"><%= listing.title %></div>
+                                <div class="listing-location">
+                                    <i class="fa-solid fa-location-dot text-danger me-1"></i>
+                                    <%= listing.location ? listing.location : '' %><%= listing.location && listing.country ? ', ' : '' %><%= listing.country ? listing.country : '' %>
+                                </div>
+                            </div>
+
+                            <!-- Price Container with Tax Toggle support -->
+                            <div class="listing-price-container">
+                                <span class="listing-price-tag">&#8377; <%= Number(listing.price || 0).toLocaleString("en-IN") %></span>
+                                <span class="text-muted" style="font-size: 0.85rem;"> / night</span>
+                                <span class="tax-info"> &nbsp;·&nbsp; &#8377; <%= Number((listing.price || 0) * 1.18).toLocaleString("en-IN", {maximumFractionDigits: 0}) %> total</span>
                             </div>
                         </div>
-
-                        <!-- Price Container with Tax Toggle support -->
-                        <div class="listing-price-container">
-                            <span class="listing-price-tag">&#8377; <%= Number(listing.price || 0).toLocaleString("en-IN") %></span>
-                            <span class="text-muted" style="font-size: 0.85rem;"> / night</span>
-                            <span class="tax-info"> &nbsp;·&nbsp; &#8377; <%= Number((listing.price || 0) * 1.18).toLocaleString("en-IN", {maximumFractionDigits: 0}) %> total</span>
-                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     <% } %>
 </div>
